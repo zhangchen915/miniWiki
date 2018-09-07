@@ -12,10 +12,13 @@ export class AuthService {
   ) {
   }
 
-  async login(body): Promise<string> {
+  async token(body): Promise<string> {
     const user: Users = await this.validateUser(body);
     if (!user) throw new ErrorMessage('user:notFound');
-    return await this.jwtService.sign(body);
+    return await this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+    });
   }
 
   async validateUser(body): Promise<Users> {

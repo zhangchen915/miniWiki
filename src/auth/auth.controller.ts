@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Res, HttpStatus, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { ErrorMessage } from '../shared/errors';
@@ -16,13 +16,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() body, @Res() res): Promise<any> {
     if (!body || !(body.email && body.password)) throw new ErrorMessage('auth:login:missing');
-    res.status(HttpStatus.ACCEPTED).json('Bearer ' + await this.authService.login(body));
+    res.status(HttpStatus.ACCEPTED).json('Bearer ' + await this.authService.token(body));
   }
 
   @Get('data')
   @UseGuards(AuthGuard())
-  findAll() {
-    // This route is restricted by AuthGuard
-    // JWT strategy
+  async role(@Req() req, @Res() res) {
+    const user = await this.authService.validateUser(req.payload);
+    res.status(HttpStatus.OK).json(user.role);
   }
 }
