@@ -1,6 +1,6 @@
-import { Controller, Post, Request, Res } from '@nestjs/common';
+import { Controller, Post, Req, Res } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { bcrypt } from 'bcrypt';
+import { hash } from 'bcrypt';
 
 @Controller('register')
 export class RegisterController {
@@ -8,7 +8,7 @@ export class RegisterController {
   }
 
   @Post()
-  async register(@Request() req, @Res() res): Promise<any> {
+  async register(@Req() req, @Res() res): Promise<any> {
     if (await this.usersService.findOneByEmail(req.body.email)) {
       return res.json({
         error: 1,
@@ -17,11 +17,11 @@ export class RegisterController {
     }
 
     const now = Date.now();
-    return await this.usersService.saveUser(Object.assign(req.body, {
+    res.json(await this.usersService.saveUser(Object.assign(req.body, {
       registerTime: now,
       lastLogin: now,
       registerIP: req.ip,
-      password: await bcrypt.hash(req.body.password.password, 10),
-    }));
+      password: await hash(req.body.password, 10),
+    })));
   }
 }

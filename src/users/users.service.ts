@@ -15,8 +15,8 @@ export class UsersService {
     return await this.photoRepository.find();
   }
 
-  async findOneByEmail(email: string): Promise<Users> {
-    return await this.photoRepository.findOne({ email: email });
+  async findOneByEmail(Email: string): Promise<Users> {
+    return await this.photoRepository.findOne({ email: Email });
   }
 
   async saveUser(user: Users): Promise<Users> {
