@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Req, Res, HttpStatus, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { ErrorMessage } from '../shared/errors';
+import { RoleGuard } from '../guards/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +20,7 @@ export class AuthController {
   }
 
   @Get('data')
-  @UseGuards(AuthGuard())
+  @UseGuards(new RoleGuard())
   async role(@Req() req, @Res() res) {
     const user = await this.authService.validateUser(req.payload);
     res.status(HttpStatus.OK).json(user.role);

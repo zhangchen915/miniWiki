@@ -13,12 +13,8 @@ export class PayloadMiddleware implements NestMiddleware {
       if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         const token = req.headers.authorization.split(' ')[1];
         req.payload = this.jwtService.verify(token);
-        next();
       }
-      else {
-        next();
-        // return res.status(401).json('The access token is not valid.');
-      }
+      next();
     };
   }
 }
