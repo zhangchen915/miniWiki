@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Injectable()
 export class UsersService {
@@ -21,5 +22,9 @@ export class UsersService {
 
   async saveUser(user: Users): Promise<Users> {
     return await this.photoRepository.save(user);
+  }
+
+  async changePassword(email, password): Promise<UpdateResult> {
+    return await this.photoRepository.update({ email: email }, { password: password });
   }
 }
