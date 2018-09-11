@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Req, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Res, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ErrorMessage } from '../shared/errors';
-import { RoleGuard } from '../guards/role.guard';
 import { UsersService } from '../users/users.service';
 
 @Controller('auth')
@@ -27,12 +26,5 @@ export class AuthController {
     if (!req.body || !req.body.password) throw new ErrorMessage('auth:body:missing');
     await this.usersService.changePassword(req.payload.email, req.body.password);
     res.status(HttpStatus.ACCEPTED).json();
-  }
-
-  @Get('data')
-  @UseGuards(new RoleGuard())
-  async role(@Req() req, @Res() res) {
-    const user = await this.authService.validateUser(req.payload);
-    res.status(HttpStatus.OK).json(user.role);
   }
 }

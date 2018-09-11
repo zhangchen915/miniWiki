@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,6 @@ export class UsersService {
   }
 
   async changePassword(email, password): Promise<UpdateResult> {
-    return await this.photoRepository.update({ email: email }, { password: password });
+    return await this.photoRepository.update({ email: email }, { password: await hash(password, 10) });
   }
 }

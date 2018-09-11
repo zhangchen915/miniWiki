@@ -1,11 +1,10 @@
-import { Injectable, NestMiddleware, MiddlewareFunction } from '@nestjs/common';
+import { Injectable, NestMiddleware, MiddlewareFunction, HttpStatus } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PayloadMiddleware implements NestMiddleware {
-  constructor(
-    private readonly jwtService: JwtService,
+  constructor(private readonly jwtService: JwtService,
   ) {
   }
 
@@ -21,11 +20,13 @@ export class PayloadMiddleware implements NestMiddleware {
           if (e instanceof TokenExpiredError) {
             const payload = Object.assign({}, req.payload);
             delete payload.exp;
-            delete payload.nbf;
+            delete payload.iat;
             res.set('Authorization', this.jwtService.sign(payload));
             next();
           }
         }
+      } else {
+        res.status(HttpStatus.FORBIDDEN);
       }
     };
   }
