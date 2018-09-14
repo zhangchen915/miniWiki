@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Req, Res, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ErrorMessage } from '../shared/errors';
 import { UsersService } from '../users/users.service';
+import { EmailPasswordDto, PasswordDto } from '../validator/user';
 
 @Controller('auth')
 export class AuthController {
@@ -16,15 +16,13 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() body, @Res() res): Promise<any> {
-    if (!body || !(body.email && body.password)) throw new ErrorMessage('auth:login:missing');
+  async login(@Body() body: EmailPasswordDto, @Res() res): Promise<any> {
     res.status(HttpStatus.ACCEPTED).json('Bearer ' + await this.authService.token(body));
   }
 
   @Post('changePassword')
-  async changePassword(@Req() req, @Res() res): Promise<any> {
-    if (!req.body || !req.body.password) throw new ErrorMessage('auth:body:missing');
-    await this.usersService.changePassword(req.payload.email, req.body.password);
+  async changePassword(@Req() req, @Body() body: PasswordDto, @Res() res): Promise<any> {
+    await this.usersService.changePassword(req.payload.email, body.password);
     res.status(HttpStatus.ACCEPTED).json();
   }
 }

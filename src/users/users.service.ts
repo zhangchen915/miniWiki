@@ -9,23 +9,23 @@ import { hash } from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(Users)
-    private readonly photoRepository: Repository<Users>,
+    private readonly userRepository: Repository<Users>,
   ) {
   }
 
   async findAll(): Promise<Users[]> {
-    return await this.photoRepository.find();
+    return await this.userRepository.find();
   }
 
   async findOneByEmail(Email: string): Promise<Users> {
-    return await this.photoRepository.findOne({ email: Email });
+    return await this.userRepository.findOne({ email: Email });
   }
 
   async saveUser(user: Users): Promise<Users> {
-    return await this.photoRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async changePassword(email, password): Promise<UpdateResult> {
-    return await this.photoRepository.update({ email: email }, { password: await hash(password, 10) });
+    return await this.userRepository.update({ email: email }, { password: await hash(password, 10) });
   }
 }

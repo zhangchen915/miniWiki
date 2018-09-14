@@ -1,6 +1,7 @@
-import { Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { hash } from 'bcrypt';
+import { EmailPasswordDto } from '../validator/user';
 
 @Controller('register')
 export class RegisterController {
@@ -8,8 +9,8 @@ export class RegisterController {
   }
 
   @Post()
-  async register(@Req() req, @Res() res): Promise<any> {
-    if (await this.usersService.findOneByEmail(req.body.email)) {
+  async register(@Req() req, @Body() body: EmailPasswordDto, @Res() res): Promise<any> {
+    if (await this.usersService.findOneByEmail(body.email)) {
       return res.json({
         error: 1,
         message: 'email exist',
@@ -21,7 +22,7 @@ export class RegisterController {
       registerTime: now,
       lastLogin: now,
       registerIP: req.ip,
-      password: await hash(req.body.password, 10),
+      password: await hash(body.password, 10),
     })));
   }
 }
