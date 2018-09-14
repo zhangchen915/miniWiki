@@ -1,9 +1,6 @@
-import { Controller, Get, Res, HttpStatus, UseGuards, Query, Delete, Post, Body } from '@nestjs/common';
-import { ErrorMessage } from '../shared/errors';
+import { Controller, Get, Res, HttpStatus, UseGuards, Query, Delete, Post, Body, Req } from '@nestjs/common';
 import { RoleGuard } from '../guards/role.guard';
 import { WikiService } from './wikis.service';
-import { mkdirp, outputFile } from 'fs-extra';
-import { UsersService } from '../users/users.service';
 
 @Controller('wiki')
 export class WikiController {
@@ -13,10 +10,10 @@ export class WikiController {
 
   @Post()
   @UseGuards(new RoleGuard())
-  async add(@Body() body, @Res() res) {
+  async add(@Req() req, @Body() body, @Res() res) {
     const result = { success: true };
     try {
-      this.wikiService.write(body);
+      this.wikiService.write(body, req.payload.email);
     } catch (e) {
       result.success = false;
     }
@@ -24,7 +21,7 @@ export class WikiController {
   }
 
   @Delete()
-  // @UseGuards(new RoleGuard())
+  @UseGuards(new RoleGuard())
   async remove(@Query() param, @Res() res) {
     const { name, mdName } = param;
     res.status(HttpStatus.OK).json({ success: true });
