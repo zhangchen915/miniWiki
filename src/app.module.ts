@@ -9,9 +9,10 @@ import { PayloadMiddleware } from './middlewares/payload.middleware';
 import { WikisModule } from './wikis/wikis.module';
 import { WikiController } from './wikis/wikis.controller';
 import { ensureDir } from 'fs-extra';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), UsersModule, AuthModule, RegisterModule, WikisModule],
+  imports: [TypeOrmModule.forRoot(), UsersModule, AuthModule, RegisterModule, WikisModule, UploadModule],
   controllers: [AppController],
   providers: [AppService],
 })
