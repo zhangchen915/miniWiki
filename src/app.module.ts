@@ -10,6 +10,7 @@ import { WikisModule } from './wikis/wikis.module';
 import { WikiController } from './wikis/wikis.controller';
 import { ensureDir } from 'fs-extra';
 import { UploadModule } from './upload/upload.module';
+import { UploadController } from './upload/upload.controller';
 
 @Module({
   imports: [TypeOrmModule.forRoot(), UsersModule, AuthModule, RegisterModule, WikisModule, UploadModule],
@@ -28,6 +29,6 @@ export class AppModule implements NestModule {
       .exclude(
         { path: '/login', method: RequestMethod.POST },
       )
-      .forRoutes(AppController, WikiController);
+      .forRoutes(AppController, WikiController, UploadController);
   }
 }
