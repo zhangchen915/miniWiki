@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Users } from '../users/users.entity';
 
 @Entity()
@@ -9,7 +9,7 @@ export class Wikis {
   @Column()
   wikiName: string;
 
-  @OneToOne(type => Users, user => user.email)
+  @ManyToOne(type => Users, user => user.email)
   @JoinColumn()
   createBy: Users;
 

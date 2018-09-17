@@ -5,9 +5,10 @@ import { WikiService } from './wikis.service';
 import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Wikis } from './wikis.entity';
+import { Article } from './article.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wikis]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Wikis, Article]), UsersModule],
   controllers: [WikiController],
   providers: [UsersService, WikiService],
 })
