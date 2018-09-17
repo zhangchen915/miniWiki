@@ -6,11 +6,12 @@ import { UsersService } from '../users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Asset } from './asset.entity';
 import { UsersModule } from '../users/users.module';
+import { Article } from '../wikis/article.entity';
 
 @Module({
   imports: [MulterModule.registerAsync({
     useClass: MulterConfigService,
-  }), TypeOrmModule.forFeature([Asset]), UsersModule],
+  }), TypeOrmModule.forFeature([Asset, Article]), UsersModule],
   controllers: [UploadController],
   providers: [AssetService, UsersService],
 })

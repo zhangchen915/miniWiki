@@ -1,4 +1,4 @@
-import { Controller, Get, Res, HttpStatus, UploadedFile, UseInterceptors, Post, FileInterceptor, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Body, UploadedFile, UseInterceptors, Post, FileInterceptor, Req, UseGuards } from '@nestjs/common';
 import { RoleGuard } from '../guards/role.guard';
 import { AssetService } from './asset.service';
 import { UsersService } from '../users/users.service';
@@ -13,7 +13,7 @@ export class UploadController {
   @Post()
   @UseGuards(new RoleGuard())
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@Req() req, @UploadedFile() file) {
-    this.assetService.saveAsset(req.payload.email, file);
+  uploadFile(@Req() req, @Body() body, @UploadedFile() file) {
+    this.assetService.saveAsset(req.payload.email, body.id, file);
   }
 }
